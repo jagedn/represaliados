@@ -4,45 +4,50 @@
 import twitter4j.TwitterFactory
 import twitter4j.StatusUpdate
 
-def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
-def slurper = new XmlSlurper(tagsoupParser)
+try{
+	def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
+	def slurper = new XmlSlurper(tagsoupParser)
 
-def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}".toURL().getText('iso-8859-1')
-def htmlParser = slurper.parseText(html)
+	def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}".toURL().getText('iso-8859-1')
+	def htmlParser = slurper.parseText(html)
 
-String nombre 
-String poblacion 
-String residencia
-String profesion
-String tipologia 
-String expediente
+	String nombre 
+	String poblacion 
+	String residencia
+	String profesion
+	String tipologia 
+	String expediente
 
-htmlParser.'**'.findAll{ it.@summary == 'Detalle'}.each {
-	nombre = "${it.tr[0].td.strong}".trim()
-	poblacion = "${it.tr[2].td}".trim()
-	residencia = "${it.tr[3].td}".trim()
-	profesion= "${it.tr[4].td}".trim()
+	htmlParser.'**'.findAll{ it.@summary == 'Detalle'}.each {
+		nombre = "${it.tr[0].td.strong}".trim()
+		poblacion = "${it.tr[2].td}".trim()
+		residencia = "${it.tr[3].td}".trim()
+		profesion= "${it.tr[4].td}".trim()
+	}
+	htmlParser.'**'.findAll{ it.@summary == 'Expediente'}.each {
+		item = it.'**'.find{ "${it?.th}".startsWith('Tipol')  }
+		tipologia = item ? item.td : null
+		item = it.'**'.find{ "${it?.th}".startsWith('Fecha de expediente')  }
+		expediente = item ? item.td : null
+	}
+
+	String message = """
+	$nombre
+	$poblacion ${residencia ? ','+residencia : ''}
+	${ profesion ? 'Profesión '+profesion : ''}
+
+	Fecha de expediente $expediente
+	-$tipologia
+	""".take(200)+"""
+
+	Para saber sobre $nombre, visita:
+	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}
+	vía @ArchivosEst
+	"""
+
+	StatusUpdate status = new StatusUpdate(message)
+	TwitterFactory.singleton.updateStatus status
+
+}catch(e){
+	println e
 }
-htmlParser.'**'.findAll{ it.@summary == 'Expediente'}.each {
-	item = it.'**'.find{ "${it?.th}".startsWith('Tipol')  }
-	tipologia = item ? item.td : null
-        item = it.'**'.find{ "${it?.th}".startsWith('Fecha de expediente')  }
-        expediente = item ? item.td : null
-}
-
-String message = """
-$nombre
-$poblacion ${residencia ? ','+residencia : ''}
-${ profesion ? 'Profesión '+profesion : ''}
-
-Fecha de expediente $expediente
--$tipologia
-""".take(200)+"""
-
-Para saber sobre $nombre, visita:
-http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}
-vía @ArchivosEst
-"""
-
-StatusUpdate status = new StatusUpdate(message)
-TwitterFactory.singleton.updateStatus status
