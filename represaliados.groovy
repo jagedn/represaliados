@@ -15,6 +15,8 @@ String poblacion
 String residencia
 String profesion
 String tipologia 
+String expediente
+
 htmlParser.'**'.findAll{ it.@summary == 'Detalle'}.each {
 	nombre = "${it.tr[0].td.strong}".trim()
 	poblacion = "${it.tr[2].td}".trim()
@@ -24,19 +26,21 @@ htmlParser.'**'.findAll{ it.@summary == 'Detalle'}.each {
 htmlParser.'**'.findAll{ it.@summary == 'Expediente'}.each {
 	item = it.'**'.find{ "${it?.th}".startsWith('Tipol')  }
 	tipologia = item ? item.td : null
+        item = it.'**'.find{ "${it?.th}".startsWith('Fecha de expediente')  }
+        expediente = item ? item.td : null
 }
 
 String message = """
 $nombre
-$poblacion ${residencia ? '('+residencia+')' : ''})
-${ profesion ? 'de profesión '+profesion : ''}
-$tipologia
+$poblacion ${residencia ? ','+residencia : ''}
+${ profesion ? 'Profesión '+profesion : ''}
 
-Represaliado num: ${args[0]}
+Fecha de expediente $expediente
+-$tipologia
+""".take(200)+"""
 
-Para saber sobre $nombre visita:
+Para saber sobre $nombre, visita:
 http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}
-
 vía @ArchivosEst
 """
 
