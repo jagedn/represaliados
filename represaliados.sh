@@ -5,5 +5,5 @@ do
 echo $i
 groovy represaliados.groovy $i
 i=$((i+1))
-sleep 60
+sleep $(( 84 + (RANDOM % 10) + 1 ))
 done
