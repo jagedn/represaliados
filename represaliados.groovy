@@ -41,8 +41,7 @@ try{
 	""".take(200)+"""
 
 	Para saber sobre $nombre, visita:
-	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}
-	vía @ArchivosEst
+	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}	
 	"""
 
 	StatusUpdate status = new StatusUpdate(message)
