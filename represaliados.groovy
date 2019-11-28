@@ -1,5 +1,9 @@
-@Grab(group='org.ccil.cowan.tagsoup',
-      module='tagsoup', version='1.2' )
+@Grab(group='org.ccil.cowan.tagsoup', module='tagsoup', version='1.2' )
+@Grab(group='org.twitter4j', module='twitter4j-core', version='4.0.6')
+
+import twitter4j.TwitterFactory
+import twitter4j.StatusUpdate
+
 def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
 def slurper = new XmlSlurper(tagsoupParser)
 
@@ -21,15 +25,20 @@ htmlParser.'**'.findAll{ it.@summary == 'Expediente'}.each {
 	item = it.'**'.find{ "${it?.th}".startsWith('Tipol')  }
 	tipologia = item ? item.td : null
 }
-println """
+
+String message = """
 $nombre
-$poblacion ($residencia)
-de profesión $profesion
+$poblacion ${residencia ? '('+residencia+')' : ''})
+${ profesion ? 'de profesión '+profesion : ''}
 $tipologia
 
 Represaliado num: ${args[0]}
 
-Para saber
+Para saber sobre $nombre visita:
 http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}
+
 vía @ArchivosEst
 """
+
+StatusUpdate status = new StatusUpdate(message)
+TwitterFactory.singleton.updateStatus status
