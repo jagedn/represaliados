@@ -50,5 +50,5 @@ while( first < 1600000 ){
 	TwitterFactory.singleton.updateStatus status
 	
 	first++
-	sleep 60+rnd.next(30)	
+	sleep 36000+(rnd.next(30)*1000)
 }
