@@ -3,14 +3,14 @@
 
 import twitter4j.TwitterFactory
 import twitter4j.StatusUpdate
-
+Random rnd = new Random()
 first = args[0] as int
 def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
 def slurper = new XmlSlurper(tagsoupParser)
 	
 while( first < 1600000 ){	
-
-	def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}".toURL().getText('iso-8859-1')
+	println first
+	def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}".toURL().getText('iso-8859-1')
 	def htmlParser = slurper.parseText(html)
 
 	String nombre 
@@ -48,4 +48,7 @@ while( first < 1600000 ){
 
 	StatusUpdate status = new StatusUpdate(message)
 	TwitterFactory.singleton.updateStatus status
+	
+	first++
+	sleep 60+rnd.next(30)	
 }
