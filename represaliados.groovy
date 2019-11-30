@@ -4,9 +4,11 @@
 import twitter4j.TwitterFactory
 import twitter4j.StatusUpdate
 
-try{
-	def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
-	def slurper = new XmlSlurper(tagsoupParser)
+first = args[0] as int
+def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
+def slurper = new XmlSlurper(tagsoupParser)
+	
+while( first < 1600000 ){	
 
 	def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}".toURL().getText('iso-8859-1')
 	def htmlParser = slurper.parseText(html)
@@ -46,7 +48,4 @@ try{
 
 	StatusUpdate status = new StatusUpdate(message)
 	TwitterFactory.singleton.updateStatus status
-
-}catch(e){
-	println e
 }
