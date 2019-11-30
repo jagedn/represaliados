@@ -43,7 +43,7 @@ while( first < 1600000 ){
 	""".take(200)+"""
 
 	Para saber sobre $nombre, visita:
-	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${args[0]}	
+	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}	
 	"""
 
 	StatusUpdate status = new StatusUpdate(message)
