@@ -48,9 +48,10 @@ while( first < 1600000 ){
 
 		StatusUpdate status = new StatusUpdate(message)
 		TwitterFactory.singleton.updateStatus status
+		
+		sleep 36000+(rnd.nextInt(30)*1000)
+		if( (first%100) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
+		if( (first%850) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
 	}
 	first++
-	sleep 36000+(rnd.nextInt(30)*1000)
-	if( (first%100) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
-	if( (first%850) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
 }
