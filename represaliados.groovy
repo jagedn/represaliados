@@ -51,4 +51,5 @@ while( first < 1600000 ){
 	
 	first++
 	sleep 36000+(rnd.nextInt(30)*1000)
+	if( (first%100) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
 }
