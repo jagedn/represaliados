@@ -32,24 +32,25 @@ while( first < 1600000 ){
 		item = it.'**'.find{ "${it?.th}".startsWith('Fecha de expediente')  }
 		expediente = item ? item.td : null
 	}
+	if( nombre ){
+		String message = """
+		$nombre
+		$poblacion ${residencia ? ','+residencia : ''}
+		${ profesion ? 'Profesión '+profesion : ''}
 
-	String message = """
-	$nombre
-	$poblacion ${residencia ? ','+residencia : ''}
-	${ profesion ? 'Profesión '+profesion : ''}
+		Fecha de expediente $expediente
+		-$tipologia
+		""".take(200)+"""
 
-	Fecha de expediente $expediente
-	-$tipologia
-	""".take(200)+"""
+		Para saber sobre $nombre, visita:
+		http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}	
+		"""
 
-	Para saber sobre $nombre, visita:
-	http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}	
-	"""
-
-	StatusUpdate status = new StatusUpdate(message)
-	TwitterFactory.singleton.updateStatus status
-	
+		StatusUpdate status = new StatusUpdate(message)
+		TwitterFactory.singleton.updateStatus status
+	}
 	first++
 	sleep 36000+(rnd.nextInt(30)*1000)
 	if( (first%100) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
+	if( (first%850) == 0 ) sleep 1000*60*(3+(rnd.nextInt(4)))
 }
