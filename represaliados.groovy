@@ -10,7 +10,19 @@ def slurper = new XmlSlurper(tagsoupParser)
 	
 while( first < 1600000 ){	
 	println first
-	def html = "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}".toURL().getText('iso-8859-1')
+	String html
+	for(int i=0; i<3;i++){
+		try{
+			html= "http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}".toURL().getText('iso-8859-1')
+			break
+		}catch(e){
+			sleep 1000*2
+		}
+	}
+	if( !html ){
+		first++;
+		continue;
+	}
 	def htmlParser = slurper.parseText(html)
 
 	String nombre 
