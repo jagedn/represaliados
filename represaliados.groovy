@@ -56,6 +56,8 @@ while( first < 1600000 ){
 
 		Para saber sobre $nombre, visita:
 		http://pares.mcu.es/victimasGCFPortal/detalle.form?idpersona=${first}	
+		
+		#represaliados 
 		"""
 
 		StatusUpdate status = new StatusUpdate(message)
